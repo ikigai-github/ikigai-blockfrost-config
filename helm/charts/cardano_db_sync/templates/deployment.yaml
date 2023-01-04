@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cardano-db-sync
+  labels:
+    {{- include "blockfrost.labels" . | nindent 4 -}}
+  {{- if .Values.global.commonAnnotations }}
+  annotations:
+    {{- include "blockfrost.annotations" . | nindent 4 -}}
+  {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app: cardano-db-sync
+  template:
+    metadata:
+      labels:
+        app: cardano-db-sync
+    spec:
+      containers:
+        - name: cardano-node
+          image: inputoutput/cardano-node:1.35.4
+          ports:
+            - containerPort: 3001
+          env:
+            - name: NETWORK
+              value: "{{ .Values.network }}"
+          volumeMounts:
+            - name: node-db
+              mountPath: /data
+            - name: node-ipc
+              mountPath: /ipc
+
+        - name: cardano-db-sync
+          image: inputoutput/cardano-db-sync:13.0.5-extra-args
+          ports:
+            - containerPort: 3002
+          env:
+            - name: NETWORK
+              value: "{{ .Values.network }}"
+            - name: POSTGRES_HOST
+              value: "{{ tpl .Values.postgresql.host . }}"
+            - name: POSTGRES_PORT
+              value: "{{ .Values.postgresql.containerPorts.postgresql }}"
+            - name: RESTORE_RECREATE_DB
+              value: "{{ .Values.postgresql.recreateDb }}"
+          volumeMounts:
+            - name: db-sync-data
+              mountPath: /var/lib/cexplorer
+            - name: node-ipc
+              mountPath: /node-ipc
+            - name: db-credentials
+              mountPath: /run/secrets
+              readOnly: true
+
+      volumes:
+        - name: node-ipc
+          emptyDir: {}
+        - name: node-db
+          persistentVolumeClaim:
+            claimName: cardano-node-db-claim
+        - name: db-sync-data
+          persistentVolumeClaim:
+            claimName: db-sync-data-claim
+        - name: db-credentials
+          secret:
+            secretName: db-user-pass

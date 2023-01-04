@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bf-config
+  labels:
+    {{- include "blockfrost.labels" . | nindent 4 -}}
+  {{- if .Values.global.commonAnnotations }}
+  annotations:
+    {{- include "blockfrost.annotations" . | nindent 4 -}}
+  {{- end }}
+data:
+  node-config.ts: |-
+{{ tpl ( .Files.Get "files/node-config.ts" ) . | indent 4 }}

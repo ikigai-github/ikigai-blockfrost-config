@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blockfrost-backend
+  labels:
+    {{- include "blockfrost.labels" . | nindent 4 -}}
+  {{- if .Values.global.commonAnnotations }}
+  annotations:
+    {{- include "blockfrost.annotations" . | nindent 4 -}}
+  {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app: blockfrost
+  template:
+    metadata:
+      labels:
+        app: blockfrost
+    spec:
+      containers:
+        - name: blockfrost-backend
+          image: blockfrost/backend-ryo:latest
+          command:
+            - /bin/sh
+            - -c
+            - >-
+              $(nix-build -A blockfrost-backend --no-out-link)/bin/blockfrost-backend
+          ports:
+            - containerPort: 3000
+          env:
+            - name: BLOCKFROST_CONFIG_DBSYNC_HOST
+              value: "{{ tpl .Values.cardano_db_sync.postgresql.host . }}"
+            - name: BLOCKFROST_CONFIG_SERVER_LISTEN_ADDRESS
+              value: "0.0.0.0"
+            - name: NODE_APP_INSTANCE
+              value: node-config
+            - name: BLOCKFROST_CONFIG_DBSYNC_USER
+              valueFrom:
+                secretKeyRef:
+                  name: db-user-pass
+                  key: postgres_user
+            - name: BLOCKFROST_CONFIG_DBSYNC_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: db-user-pass
+                  key: postgres_db
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-user-pass
+                  key: postgres_password
+          volumeMounts:
+            - name: app-config
+              mountPath: /app/config
+      volumes:
+        - name: app-config
+          configMap:
+            name: bf-config

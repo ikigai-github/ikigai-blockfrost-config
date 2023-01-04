@@ -1,0 +1,18 @@
+---
+global:
+  commonLabels: {}
+  commonAnnotations: {}
+
+serviceType: NodePort
+ingress:
+  enabled: false
+  host:  ""
+  tls:
+    enabled: false
+    secretName: ""
+  annotations: {}
+
+cardano_db_sync:
+  postgresql:
+    host: "{{ .Release.Name }}-postgresql"
+

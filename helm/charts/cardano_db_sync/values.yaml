@@ -1,0 +1,28 @@
+global:
+  commonLabels: {}
+  commonAnnotations: {}
+
+#nodeStorageClassName: ebs-sc
+nodeStorageSize: 1Gi
+syncStorageSize: 3Gi
+postgresStorageSize: 8Gi
+#syncStorageClassName: ebs-sc
+
+network: preview
+
+postgresql:
+  self_managed: true
+  host: "{{ .Release.Name }}-postgresql"
+  recreateDb: "N"
+  auth:
+    database: cexplorer
+    username: cexplorer
+    existingSecret: db-user-pass
+    secretKeys:
+      adminPasswordKey: postgres_admin_password
+      userPasswordKey: postgres_password
+  primary:
+    persistence:
+      existingClaim: postgres-data-claim
+  containerPorts:
+    postgresql: "5432"
