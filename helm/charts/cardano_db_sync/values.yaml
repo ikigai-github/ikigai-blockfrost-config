@@ -12,6 +12,7 @@ network: preview
 
 postgresql:
   self_managed: true
+  self_managed_auth_secret: false
   host: "{{ .Release.Name }}-postgresql"
   recreateDb: "N"
   auth:
