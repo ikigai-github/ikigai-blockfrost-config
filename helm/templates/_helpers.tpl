@@ -1,6 +1,6 @@
 {{- define "blockfrost.labels" -}}
-app.kubernetes.io/name: {{ include "common.names.name" . }}
-helm.sh/chart: {{ include "common.names.chart" . }}
+app.kubernetes.io/name: blockfrost
+helm.sh/chart: {{ .Chart.Name }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- range $k, $v := .Values.global.commonLabels }}
