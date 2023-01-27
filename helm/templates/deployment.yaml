@@ -33,7 +33,7 @@ spec:
             - name: BLOCKFROST_CONFIG_SERVER_LISTEN_ADDRESS
               value: "0.0.0.0"
             - name: NODE_APP_INSTANCE
-              value: node-config
+              value: node-config.ts
             - name: BLOCKFROST_CONFIG_DBSYNC_USER
               valueFrom:
                 secretKeyRef:
