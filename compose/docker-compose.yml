@@ -79,7 +79,7 @@ services:
     image: blockfrost/backend-ryo:latest
     command:
       - /bin/sh
-      - -c 
+      - -c
       - $$(nix-build -A blockfrost-backend --no-out-link)/bin/blockfrost-backend
     environment:
       - BLOCKFROST_CONFIG_DBSYNC_HOST=postgres
@@ -95,7 +95,6 @@ services:
         condition: service_healthy
     volumes:
       - ./config:/app/config
-      - ./secret_env_parser.sh:/app/secret_env_parser.sh
     restart: on-failure
     logging:
       driver: "json-file"

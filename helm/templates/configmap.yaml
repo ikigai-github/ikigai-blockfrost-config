@@ -10,5 +10,13 @@ metadata:
     {{- include "blockfrost.annotations" . | nindent 4 -}}
   {{- end }}
 data:
-  node-config.ts: |-
-{{ tpl ( .Files.Get "files/node-config.ts" ) . | indent 4 }}
+  development-testnet.ts: |-
+{{ tpl ( .Files.Get "files/development-testnet.ts" ) . | indent 4 }}
+  development.ts: |-
+{{ tpl ( .Files.Get "files/development.ts" ) . | indent 4 }}
+  mainnet.ts: |-
+{{ tpl ( .Files.Get "files/mainnet.ts" ) . | indent 4 }}
+  test.ts: |-
+{{ tpl ( .Files.Get "files/test.ts" ) . | indent 4 }}
+  testnet.ts: |-
+{{ tpl ( .Files.Get "files/testnet.ts" ) . | indent 4 }}
