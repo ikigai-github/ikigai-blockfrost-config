@@ -33,7 +33,7 @@ spec:
             - name: BLOCKFROST_CONFIG_SERVER_LISTEN_ADDRESS
               value: "0.0.0.0"
             - name: NODE_APP_INSTANCE
-              value: development
+              value: "{{ .Values.config.nodeAppInstance }}"
             - name: BLOCKFROST_CONFIG_DBSYNC_USER
               valueFrom:
                 secretKeyRef:
@@ -55,4 +55,4 @@ spec:
       volumes:
         - name: node-config
           configMap:
-            name: bf-config
+            name: {{ if not .Values.config.selfManagedConfigMapName }}bf-config{{  else }}{{ .Values.config.selfManagedConfigMapName }}{{ end }}

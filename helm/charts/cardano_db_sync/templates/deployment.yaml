@@ -64,4 +64,4 @@ spec:
             claimName: db-sync-data-claim
         - name: db-credentials
           secret:
-            secretName: db-user-pass
+            secretName: {{ .Values.postgresql.auth.existingSecret }}

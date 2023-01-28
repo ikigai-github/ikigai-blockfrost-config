@@ -1,3 +1,5 @@
+
+{{ if not .Values.config.selfManagedConfigMapName }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -20,3 +22,4 @@ data:
 {{ tpl ( .Files.Get "files/test.ts" ) . | indent 4 }}
   testnet.ts: |-
 {{ tpl ( .Files.Get "files/testnet.ts" ) . | indent 4 }}
+{{ end }}
