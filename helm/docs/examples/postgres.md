@@ -11,9 +11,9 @@
 cardano_db_sync:
   postgresql:
     deploy: true
-    deployAuthSecret: true
     host: "mypostgres.example.com"
     auth:
+      deploySecret: true
       username: cexplorer  # even though the auth secret already exists, you need to tell postgres what user should be created
       database: cexplorer  # same as the username, you need to tell postgres what database should be created
       existingSecret: "my-pgsql-creds"  # could also just use default value, if your secret matches that name
@@ -28,9 +28,9 @@ cardano_db_sync:
 cardano_db_sync:
   postgresql:
     deploy: true
-    deployAuthSecret: false
     host: "mypostgres.example.com"
     auth:
+      deploySecret: false
       username: cexplorer  # even though the auth secret already exists, you need to tell postgres what user should be created
       database: cexplorer  # same as the username, you need to tell postgres what database should be created
       existingSecret: "my-pgsql-creds"  # could also just use default value, if your secret matches that name
@@ -58,9 +58,9 @@ data:
 cardano_db_sync:
   postgresql:
     deploy: false
-    deployAuthSecret: false
     host: "mypostgres.example.com"
     auth:
+      deploySecret: false
       existingSecret: "my-pgsql-creds"  # could also just use default value, if your secret matches that name
 ...
 

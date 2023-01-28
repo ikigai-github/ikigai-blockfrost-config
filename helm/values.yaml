@@ -18,6 +18,7 @@ config:
 cardano_db_sync:
   postgresql:
     deploy: true
-    deployAuthSecret: true
+    auth:
+      deploySecret: true
     host: "{{ .Release.Name }}-postgresql"
 
