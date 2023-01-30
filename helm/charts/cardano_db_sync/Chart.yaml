@@ -5,4 +5,4 @@ dependencies:
   - name: postgresql
     version: 11.6.18
     repository: https://charts.bitnami.com/bitnami
-    condition: postgresql.self_managed
+    condition: postgresql.deploy

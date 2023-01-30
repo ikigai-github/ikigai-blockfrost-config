@@ -11,8 +11,14 @@ ingress:
     enabled: false
     secretName: ""
   annotations: {}
+config:
+  nodeAppInstance: development
+  selfManagedConfigMapName: ""
 
 cardano_db_sync:
   postgresql:
+    deploy: true
+    auth:
+      deploySecret: true
     host: "{{ .Release.Name }}-postgresql"
 

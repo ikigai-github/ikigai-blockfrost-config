@@ -2,19 +2,23 @@ global:
   commonLabels: {}
   commonAnnotations: {}
 
-#nodeStorageClassName: ebs-sc
 nodeStorageSize: 1Gi
+#nodeStorageClassName: ebs-sc
+
 syncStorageSize: 3Gi
-postgresStorageSize: 8Gi
 #syncStorageClassName: ebs-sc
+
+postgresStorageSize: 8Gi
+#postgresStorageClassName: ebs-sc
 
 network: preview
 
 postgresql:
-  self_managed: true
+  deploy: true
   host: "{{ .Release.Name }}-postgresql"
   recreateDb: "N"
   auth:
+    deploySecret: true
     database: cexplorer
     username: cexplorer
     existingSecret: db-user-pass

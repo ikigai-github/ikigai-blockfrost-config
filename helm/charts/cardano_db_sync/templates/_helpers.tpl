@@ -10,7 +10,7 @@
     {{- end }}
   {{ end }}
 
-  {{- if .Values.postgresql.self_managed }}
+  {{- if .Values.postgresql.deploy }}
     {{- if .Values.postgresql.auth.postgresPassword -}}
       postgres_admin_password: {{ .Values.postgresql.auth.postgresPassword }}
     {{- else }}

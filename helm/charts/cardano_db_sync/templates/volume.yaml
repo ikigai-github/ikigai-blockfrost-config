@@ -39,7 +39,7 @@ spec:
     requests:
       storage: "{{ .Values.syncStorageSize }}"
 
-{{ if .Values.postgresql.self_managed }}
+{{ if .Values.postgresql.deploy }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -54,8 +54,8 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  {{- if .Values.syncStorageClassName }}
-  storageClassName: "{{ .Values.syncStorageClassName }}"
+  {{- if .Values.postgresStorageClassName }}
+  storageClassName: "{{ .Values.postgresStorageClassName }}"
   {{- end }}
   resources:
     requests:
