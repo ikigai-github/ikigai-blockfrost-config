@@ -24,6 +24,8 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
+    networks:
+      - blockfrost
 
   cardano-node:
     image: inputoutput/cardano-node:1.35.4
@@ -45,6 +47,8 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
+    networks:
+      - blockfrost
 
   cardano-db-sync:
     image: inputoutput/cardano-db-sync:13.0.5-extra-args
@@ -74,6 +78,8 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
+    networks:
+      - blockfrost
 
   blockfrost:
     image: blockfrost/backend-ryo:latest
@@ -101,9 +107,16 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
+    networks:
+      - blockfrost
+
 
 volumes:
   db-sync-data:
   postgres:
   node-db:
   node-ipc:
+
+networks:
+  blockfrost:
+    name: custom_blockfrost_net
