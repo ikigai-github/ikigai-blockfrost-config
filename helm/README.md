@@ -6,14 +6,14 @@ The cardano db-sync service is included in this deployment as a subchart. Postgr
 
 ## Postgresl and Cardano db-sync
 
-More documentation regarding these services can be found at:
-[deployment examples](./docs/examples)
-[cardano_db_sync subchart](./charts/cardano_db_sync/README.md)
+More documentation regarding these services can be found at: <br>
+[deployment examples](./docs/examples) <br>
+[cardano_db_sync subchart](./charts/cardano_db_sync/README.md) <br>
 
 
 ## Usage
 
-The default settings are designed for a local/development deployment of blockfrost. This includes a local postgresql instance and does not include an ingress <br>(the blockfrost service will only be accessible in-cluster).
+The default settings are designed for a local/development deployment of blockfrost. This includes a local postgresql instance and does not include an ingress (the blockfrost service will only be accessible in-cluster). <br>
 ```
 # working dir is helm
 
