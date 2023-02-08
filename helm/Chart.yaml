@@ -1,4 +1,8 @@
 apiVersion: v2
 name: blockfrost
 version: 1.0.0
-
+dependencies:
+  - name: postgresql
+    version: 11.6.18
+    repository: https://charts.bitnami.com/bitnami
+    condition: cardano_db_sync.postgresql.deploy
