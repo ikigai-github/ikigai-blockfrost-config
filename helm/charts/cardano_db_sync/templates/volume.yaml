@@ -38,26 +38,3 @@ spec:
   resources:
     requests:
       storage: "{{ .Values.syncStorageSize }}"
-
-{{ if .Values.postgresql.deploy }}
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: postgres-data-claim
-  labels:
-    {{- include "blockfrost.labels" . | nindent 4 -}}
-  {{- if .Values.global.commonAnnotations }}
-  annotations:
-    {{- include "blockfrost.annotations" . | nindent 4 -}}
-  {{- end }}
-spec:
-  accessModes:
-    - ReadWriteOnce
-  {{- if .Values.postgresStorageClassName }}
-  storageClassName: "{{ .Values.postgresStorageClassName }}"
-  {{- end }}
-  resources:
-    requests:
-      storage: "{{ .Values.postgresStorageSize }}"
-{{ end }}

@@ -2,11 +2,18 @@
 global:
   commonLabels: {}
   commonAnnotations: {}
+  postgresql:
+    host: "{{ .Release.Name }}-postgresql"
+    service:
+      ports:
+        postgresql: "5432"
+    auth:
+      existingSecret: db-user-pass
 
 serviceType: NodePort
 ingress:
   enabled: false
-  host:  ""
+  host: ""
   tls:
     enabled: false
     secretName: ""
@@ -15,10 +22,18 @@ config:
   nodeAppInstance: development
   selfManagedConfigMapName: ""
 
-cardano_db_sync:
-  postgresql:
-    deploy: true
-    auth:
-      deploySecret: true
-    host: "{{ .Release.Name }}-postgresql"
+postgresStorageSize: 8Gi
+#postgresStorageClassName: ebs-sc
 
+postgresql:
+  deploy: true
+  auth:
+    deploySecret: true
+    database: cexplorer
+    username: cexplorer
+    secretKeys:
+      adminPasswordKey: postgres_admin_password
+      userPasswordKey: postgres_password
+  primary:
+    persistence:
+      existingClaim: postgres-data-claim

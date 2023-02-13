@@ -8,25 +8,5 @@ nodeStorageSize: 1Gi
 syncStorageSize: 3Gi
 #syncStorageClassName: ebs-sc
 
-postgresStorageSize: 8Gi
-#postgresStorageClassName: ebs-sc
-
 network: preview
-
-postgresql:
-  deploy: true
-  host: "{{ .Release.Name }}-postgresql"
-  recreateDb: "N"
-  auth:
-    deploySecret: true
-    database: cexplorer
-    username: cexplorer
-    existingSecret: db-user-pass
-    secretKeys:
-      adminPasswordKey: postgres_admin_password
-      userPasswordKey: postgres_password
-  primary:
-    persistence:
-      existingClaim: postgres-data-claim
-  containerPorts:
-    postgresql: "5432"
+recreateDb: "N"
