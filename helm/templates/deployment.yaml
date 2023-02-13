@@ -32,17 +32,17 @@ spec:
             - name: BLOCKFROST_CONFIG_DBSYNC_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.global.postgresql.auth.existingSecret }}
+                  name: {{ .Values.global.postgresql.auth.secretName }}
                   key: postgres_user
             - name: BLOCKFROST_CONFIG_DBSYNC_DATABASE
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.global.postgresql.auth.existingSecret }}
+                  name: {{ .Values.global.postgresql.auth.secretName }}
                   key: postgres_db
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.global.postgresql.auth.existingSecret }}
+                  name: {{ .Values.global.postgresql.auth.secretName }}
                   key: postgres_password
           volumeMounts:
             - name: node-config

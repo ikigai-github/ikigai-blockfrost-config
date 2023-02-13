@@ -16,7 +16,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{- define "blockfrost.postgres_pass" -}}
-  {{- $existingSecret := (lookup "v1" "Secret" .Release.Namespace .Values.global.postgresql.auth.existingSecret) }}
+  {{- $existingSecret := (lookup "v1" "Secret" .Release.Namespace .Values.global.postgresql.auth.secretName) }}
   {{- if .Values.postgresql.auth.password -}}
     postgres_password: {{ .Values.postgresql.auth.password }}
   {{- else }}

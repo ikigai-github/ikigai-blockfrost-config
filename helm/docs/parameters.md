@@ -80,13 +80,13 @@
 </tr>
 
 <tr>
-<td>cardano_db_sync.postgresStorageClassName</td>
+<td>postgresql.postgresStorageClassName</td>
 <td>The name of the storage class that should satisfy the postgres persistent storage claim, if postgres is being deployed. Default is cluster default</td>
 <td></td>
 </tr>
 
 <tr>
-<td>cardano_db_sync.postgresStorageSize</td>
+<td>postgresql.postgresStorageSize</td>
 <td>The size of the postgres persistent storage claim, if postgres is being deployed</td>
 <td>8Gi</td>
 </tr>
@@ -98,43 +98,43 @@
 </tr>
 
 <tr>
-<td>cardano_db_sync.postgresql.deploy</td>
-<td>If true, postgres will be deployed by a helm subhcart and amaged by this stack</td>
+<td>postgresql.deploy</td>
+<td>If true, postgres will be deployed by a helm subhcart and managed by this stack</td>
 <td>true</td>
 </tr>
 
 <tr>
-<td>cardano_db_sync.postgresql.host</td>
+<td>global.postgresql.host</td>
 <td>The hostname for the postgresql instance</td>
 <td>"{{ .Release.Name }}-postgresql"</td>
 </tr>
 
 <tr>
-<td>cardano_db_sync.postgresql.recreateDb</td>
-<td>If using a deployed postgres instance, 'Y' will cause the database to be dropped and recreated</td>
+<td>cardano_db_sync.recreateDb</td>
+<td>If 'Y', will cause the db-sync database to be dropped and recreated</td>
 <td>'N'</td>
 </tr>
 
 <tr>
-<td>cardano_db_sync.postgresql.auth.deploySecret</td>
+<td>postgresql.auth.deploySecret</td>
 <td>If true, a secret will be created with pgsql connection details. The alternative is using a secret that is created outside of this helm chart.</td>
 <td>true</td>
 </tr>
 
 <tr>
-<td>cardano_db_sync.postgresql.auth.database</td>
+<td>postgresql.auth.database</td>
 <td>The name of the database db-sync should connect to in pgsql. If using a deployed pg instance, this database will be created</td>
 <td>"cexplorer"</td>
 </tr>
 
 <tr>
-<td>cardano_db_sync.postgresql.auth.username</td>
+<td>postgresql.auth.username</td>
 <td>The username the db-sync instance should use to connect to pgsql. If using a deployed pg instance, this user will be created with db owner</td>
 <td>"cexplorer"</td>
 </tr>
 
 <tr>
-<td>cardano_db_sync.postgresql.auth.existingSecret</td>
+<td>global.postgresql.auth.secretName</td>
 <td>The name of the auth secret, either pre-existing or to be created</td>
 <td>"db-user-pass"</td>
 </tr>

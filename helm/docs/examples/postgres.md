@@ -1,6 +1,5 @@
 # Postgres Deployment Examples
 
-
 ## Deploy Postgres And Deploy Secret
 
 <b>Note</b>: When using this stack to deploy the auth secret, a password will be automatically generated. As long as this secret persists across updates, you will be able to access the database. However, if the secret is destroyed or replaced, you will no longer be able to access the database.
@@ -8,32 +7,38 @@
 ```yaml
 ---
 # values.postgres.yaml
-cardano_db_sync:
+global:
   postgresql:
-    deploy: true
-    host: "mypostgres.example.com"
+    host: host: "mypostgres.example.com"
     auth:
-      deploySecret: true
-      username: cexplorer  # even though the auth secret already exists, you need to tell postgres what user should be created
-      database: cexplorer  # same as the username, you need to tell postgres what database should be created
-      existingSecret: "my-pgsql-creds"  # could also just use default value, if your secret matches that name
+      secretName: "my-pgsql-creds"  # could also just use default value, if your secret matches that name
+
+postgresql:
+  deploy: true
+  auth:
+    deploySecret: true
+    username: cexplorer  # even though the auth secret already exists, you need to tell postgres what user should be created
+    database: cexplorer  # same as the username, you need to tell postgres what database should be created
 ...
 ```
 
-
 ## Deploy Postgres With External Secret
+
 ```yaml
 ---
 # values.postgres.yaml
-cardano_db_sync:
+global:
   postgresql:
-    deploy: true
-    host: "mypostgres.example.com"
+    host: host: "mypostgres.example.com"
     auth:
-      deploySecret: false
-      username: cexplorer  # even though the auth secret already exists, you need to tell postgres what user should be created
-      database: cexplorer  # same as the username, you need to tell postgres what database should be created
-      existingSecret: "my-pgsql-creds"  # could also just use default value, if your secret matches that name
+      secretName: "my-pgsql-creds"  # could also just use default value, if your secret matches that name
+
+postgresql:
+  deploy: true
+  auth:
+    deploySecret: false
+    username: cexplorer  # even though the auth secret already exists, you need to tell postgres what user should be created
+    database: cexplorer  # same as the username, you need to tell postgres what database should be created
 ...
 
 ---
@@ -47,21 +52,23 @@ data:
   postgres_user: cexplorer
   postgres_password: supersecurepass
   postgres_admin_password: postgresuserpass # this field is specifically for the 'postgres' user on the database
-...
 ```
 
-
 ## External Postgres With External Secret
+
 ```yaml
 ---
 # values.postgres.yaml
-cardano_db_sync:
+global:
   postgresql:
-    deploy: false
-    host: "mypostgres.example.com"
+    host: host: "mypostgres.example.com"
     auth:
-      deploySecret: false
-      existingSecret: "my-pgsql-creds"  # could also just use default value, if your secret matches that name
+      secretName: "my-pgsql-creds"  # could also just use default value, if your secret matches that name
+
+postgresql:
+  deploy: false
+  auth:
+    deploySecret: false
 ...
 
 ---
@@ -75,5 +82,4 @@ data:
   postgres_db: cexplorer
   postgres_user: cexplorer
   postgres_password: supersecurepass
-...
 ```

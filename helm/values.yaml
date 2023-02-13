@@ -8,7 +8,7 @@ global:
       ports:
         postgresql: "5432"
     auth:
-      existingSecret: db-user-pass
+      secretName: db-user-pass
 
 serviceType: NodePort
 ingress:
