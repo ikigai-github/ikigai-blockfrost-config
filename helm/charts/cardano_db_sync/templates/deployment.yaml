@@ -39,11 +39,11 @@ spec:
             - name: NETWORK
               value: "{{ .Values.network }}"
             - name: POSTGRES_HOST
-              value: "{{ tpl .Values.postgresql.host . }}"
+              value: "{{ tpl .Values.global.postgresql.host . }}"
             - name: POSTGRES_PORT
-              value: "{{ .Values.postgresql.containerPorts.postgresql }}"
+              value: "{{ .Values.global.postgresql.service.ports.postgresql }}"
             - name: RESTORE_RECREATE_DB
-              value: "{{ .Values.postgresql.recreateDb }}"
+              value: "{{ .Values.recreateDb }}"
           volumeMounts:
             - name: db-sync-data
               mountPath: /var/lib/cexplorer
@@ -64,4 +64,4 @@ spec:
             claimName: db-sync-data-claim
         - name: db-credentials
           secret:
-            secretName: {{ .Values.postgresql.auth.existingSecret }}
+            secretName: {{ .Values.global.postgresql.auth.existingSecret }}
