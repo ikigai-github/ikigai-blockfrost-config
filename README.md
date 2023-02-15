@@ -11,3 +11,12 @@ out of the box, but also provides options to easily configure and control the de
 
 - [docker-compose](./compose/README.md)
 - [helm](./helm/blockfrost/README.md)
+
+## Installing The Pre-Built Helm Chart
+
+You can install our helm chart by following these commands:
+
+```sh
+helm repo add myrepo https://ikigai-github.github.io/ikigai-blockfrost-config/helm
+helm install blockfrost myrepo/blockfrost
+```
