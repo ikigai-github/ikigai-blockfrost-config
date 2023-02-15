@@ -10,4 +10,4 @@ For more flexability or non-local deployments, the `helm` deployment will be a b
 out of the box, but also provides options to easily configure and control the deployment.
 
 - [docker-compose](./compose/README.md)
-- [helm](./helm/README.md)
+- [helm](./helm/blockfrost/README.md)
