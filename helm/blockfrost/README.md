@@ -10,10 +10,10 @@ More documentation regarding these services can be found at: <br>
 [deployment examples](./docs/examples) <br>
 [cardano_db_sync subchart](./charts/cardano_db_sync/README.md) <br>
 
-
 ## Usage
 
 The default settings are designed for a local/development deployment of blockfrost. This includes a local postgresql instance and does not include an ingress (the blockfrost service will only be accessible in-cluster). <br>
+
 ```
 # working dir is helm
 
@@ -25,7 +25,6 @@ helm install --create-namespace --namespace blockfrost .
 Helm uses `values.yaml` files or command line parameters to change and template the kubernetes manifests. <br>
 The [parameter documentation](./docs/parameters.md) has all available parameters, descriptions, and default values. <br>
 For input examples, see [the example documentation](./docs/examples)
-
 
 ### Accessing Services
 
