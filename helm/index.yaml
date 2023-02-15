@@ -11,6 +11,6 @@ entries:
     digest: 222743d7adacc00ac1ef9d16d979e0203ec83d45eaa90e8890c36c65534e6117
     name: blockfrost
     urls:
-    - https://ikigai-github.github.io/ikigai-blockfrost-config/blockfrost/blockfrost-1.0.0.tgz
+    - https://ikigai-github.github.io/ikigai-blockfrost-config/helm/blockfrost/blockfrost-1.0.0.tgz
     version: 1.0.0
 generated: "2023-02-15T13:25:49.160337112-05:00"
