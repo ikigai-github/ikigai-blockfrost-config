@@ -20,3 +20,12 @@ You can install our helm chart by following these commands:
 helm repo add myrepo https://ikigai-github.github.io/ikigai-blockfrost-config/helm
 helm install blockfrost myrepo/blockfrost
 ```
+
+## Submitting Transactions
+
+By default, the RYO blockfrost instance does not come with the endpoints required for submitting transactions to the blockchain. In order to do this, you must use the Cardano Submit API service. <br>
+Both the docker compose and helm deployments will automatically deploy the cardano submit api service for you, but additional work is required for your application to use it. <br>
+One solution would be to create a proxy (like NGINX) in front of both the blockfrost and submit api services. The proxy could direct traffic to either blockfrost or the submit api depending on the <br>
+request URI, acting like an api gateway.<br>
+Another possible solution would be to adjust the application code so it uses the blockfrost service for reading/getting data, and uses the submit api service for writing data to the chain.<br>
+The right solution for your application depends on your use case and requirements, but feel free to reach out to our team for suggestions.
