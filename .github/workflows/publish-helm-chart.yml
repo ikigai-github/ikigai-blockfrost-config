@@ -1,0 +1,55 @@
+name: "Publish Helm Chart"
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - v*
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: "${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.ACTIONS_OIDC_ROLE }}
+          aws-region: us-east-1
+
+      - name: Install Helm S3 Plugin
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm plugin install https://github.com/hypnoglow/helm-s3.git
+
+      - name: Register S3 Helm Repo
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm repo add public-s3 s3://ikigai-shared-helm-charts-public/blockfrost/
+
+      - name: Install Helm Dependencies
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm dependency build helm/blockfrost
+
+      - name: Package The Generated Helm Chart
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm package helm/blockfrost
+
+      - name: Push The Helm Package to The Remote
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm s3 push --relative ./blockfrost-*.tgz public-s3
+        env:
+          HELM_S3_MODE: 3

@@ -9,6 +9,7 @@ global:
         postgresql: "5432"
     auth:
       secretName: db-user-pass
+      existingSecret: db-user-pass
 
 serviceType: NodePort
 ingress:

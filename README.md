@@ -17,9 +17,13 @@ out of the box, but also provides options to easily configure and control the de
 You can install our helm chart by following these commands:
 
 ```sh
-helm repo add myrepo https://ikigai-github.github.io/ikigai-blockfrost-config/helm
+helm repo add myrepo http://ikigai-shared-helm-charts-public.s3-website-us-east-1.amazonaws.com
 helm install blockfrost myrepo/blockfrost
 ```
+
+#### Deprecated Install
+
+Previously, you would install the tgz archive located in this repo. That method is now deprecated.
 
 ## Submitting Transactions
 
