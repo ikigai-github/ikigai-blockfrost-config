@@ -81,6 +81,25 @@ services:
     networks:
       - blockfrost
 
+  cardano-submit-api:
+    image: inputoutput/cardano-submit-api:1.35.5
+    environment:
+      - NETWORK=${NETWORK:-preview}
+    depends_on:
+      - cardano-node
+    volumes:
+      - node-ipc:/node-ipc
+    ports:
+      - 8090:8090
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    networks:
+      - blockfrost
+
   blockfrost:
     image: blockfrost/backend-ryo:latest
     command:
@@ -109,7 +128,6 @@ services:
         max-file: "10"
     networks:
       - blockfrost
-
 
 volumes:
   db-sync-data:

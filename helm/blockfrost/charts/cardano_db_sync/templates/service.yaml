@@ -17,5 +17,8 @@ spec:
     - name: cardano-db-sync
       port: 3002
       targetPort: 3002
+    - name: cardano-submit-api
+      port: 8090
+      targetPort: 8090
   selector:
     app: cardano-db-sync

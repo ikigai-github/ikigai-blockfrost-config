@@ -53,6 +53,17 @@ spec:
               mountPath: /run/secrets
               readOnly: true
 
+        - name: cardano-submit-api
+          image: inputoutput/cardano-submit-api:1.35.5
+          ports:
+            - containerPort: 8090
+          env:
+            - name: NETWORK
+              value: "{{ .Values.network }}"
+          volumeMounts:
+            - name: node-ipc
+              mountPath: /ipc
+
       volumes:
         - name: node-ipc
           emptyDir: {}

@@ -1,3 +1,4 @@
 **/charts/*.tar.gz
 **/charts/*.tgz
 Chart.lock
+./blockfrost-*.tgz
