@@ -11,6 +11,7 @@ global:
       secretName: db-user-pass
       existingSecret: db-user-pass
 
+imageTag: latest
 serviceType: NodePort
 ingress:
   enabled: false
@@ -23,7 +24,7 @@ config:
   nodeAppInstance: development
   selfManagedConfigMapName: ""
 
-postgresStorageSize: 8Gi
+postgresStorageSize: 30Gi
 #postgresStorageClassName: ebs-sc
 
 postgresql:

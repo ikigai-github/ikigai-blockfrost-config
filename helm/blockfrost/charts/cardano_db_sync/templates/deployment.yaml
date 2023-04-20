@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: cardano-node
-          image: inputoutput/cardano-node:1.35.4
+          image: inputoutput/cardano-node:{{ .Values.nodeImageTag }}
           ports:
             - containerPort: 3001
           env:
@@ -32,7 +32,7 @@ spec:
               mountPath: /ipc
 
         - name: cardano-db-sync
-          image: inputoutput/cardano-db-sync:13.0.5-extra-args
+          image: inputoutput/cardano-db-sync:{{ .Values.dbSyncImageTag }}
           ports:
             - containerPort: 3002
           env:
@@ -44,6 +44,8 @@ spec:
               value: "{{ .Values.global.postgresql.service.ports.postgresql }}"
             - name: RESTORE_RECREATE_DB
               value: "{{ .Values.recreateDb }}"
+            - name: RESTORE_SNAPSHOT
+              value: ''
           volumeMounts:
             - name: db-sync-data
               mountPath: /var/lib/cexplorer
@@ -54,7 +56,7 @@ spec:
               readOnly: true
 
         - name: cardano-submit-api
-          image: inputoutput/cardano-submit-api:1.35.5
+          image: inputoutput/cardano-submit-api:{{ .Values.nodeImageTag }}
           ports:
             - containerPort: 8090
           env:
