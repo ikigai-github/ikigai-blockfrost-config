@@ -9,7 +9,8 @@ syncStorageSize: 30Gi
 #syncStorageClassName: ebs-sc
 
 network: preview
-recreateDb: "N"
+
 dbSyncImageTag: 13.1.0.2
 nodeImageTag: 1.35.5
 restoreSnapshot: ""
+recreateDb: "N"
