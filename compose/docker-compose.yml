@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   postgres:
-    image: postgres:11.5-alpine
+    image: postgres:11.18-alpine
     environment:
       - POSTGRES_LOGGING=true
       - PGDATA=/var/lib/postgresql/data/pgdata
@@ -28,7 +28,7 @@ services:
       - blockfrost
 
   cardano-node:
-    image: inputoutput/cardano-node:1.35.4
+    image: inputoutput/cardano-node:1.35.5
     environment:
       - NETWORK=${NETWORK:-preview}
     ports:
@@ -51,7 +51,7 @@ services:
       - blockfrost
 
   cardano-db-sync:
-    image: inputoutput/cardano-db-sync:13.0.5-extra-args
+    image: inputoutput/cardano-db-sync:13.1.0.2
     environment:
       - NETWORK=${NETWORK:-preview}
       - POSTGRES_HOST=postgres
@@ -102,10 +102,6 @@ services:
 
   blockfrost:
     image: blockfrost/backend-ryo:latest
-    command:
-      - /bin/sh
-      - -c
-      - $$(nix-build -A blockfrost-backend --no-out-link)/bin/blockfrost-backend
     environment:
       - BLOCKFROST_CONFIG_DBSYNC_HOST=postgres
       - BLOCKFROST_CONFIG_SERVER_LISTEN_ADDRESS=0.0.0.0

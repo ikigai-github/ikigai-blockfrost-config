@@ -2,11 +2,15 @@ global:
   commonLabels: {}
   commonAnnotations: {}
 
-nodeStorageSize: 1Gi
+nodeStorageSize: 10Gi
 #nodeStorageClassName: ebs-sc
 
-syncStorageSize: 3Gi
+syncStorageSize: 30Gi
 #syncStorageClassName: ebs-sc
 
 network: preview
+
+dbSyncImageTag: 13.1.0.2
+nodeImageTag: 1.35.5
+restoreSnapshot: ""
 recreateDb: "N"
