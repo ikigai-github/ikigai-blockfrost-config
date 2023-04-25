@@ -45,7 +45,7 @@ spec:
             - name: RESTORE_RECREATE_DB
               value: "{{ .Values.recreateDb }}"
             - name: RESTORE_SNAPSHOT
-              value: ''
+              value: "{{ .Values.restoreSnapshot }}"
           volumeMounts:
             - name: db-sync-data
               mountPath: /var/lib/cexplorer
