@@ -10,6 +10,6 @@ export default {
     database: 'cdbsync',
     maxConnections: 10,
   },
-  network: 'mainnet',
+  network: 'preview',
   tokenRegistryUrl: 'https://tokens.cardano.org',
 };
