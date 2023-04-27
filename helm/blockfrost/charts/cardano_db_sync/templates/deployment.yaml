@@ -22,9 +22,10 @@ spec:
           image: inputoutput/cardano-node:{{ .Values.nodeImageTag }}
           ports:
             - containerPort: 3001
+          workingDir: /data
           env:
             - name: NETWORK
-              value: "{{ .Values.network }}"
+              value: "{{ .Values.global.cardanoNetwork }}"
           volumeMounts:
             - name: node-db
               mountPath: /data
@@ -33,11 +34,12 @@ spec:
 
         - name: cardano-db-sync
           image: inputoutput/cardano-db-sync:{{ .Values.dbSyncImageTag }}
+          workingDir: /var/lib/cexplorer
           ports:
             - containerPort: 3002
           env:
             - name: NETWORK
-              value: "{{ .Values.network }}"
+              value: "{{ .Values.global.cardanoNetwork }}"
             - name: POSTGRES_HOST
               value: "{{ tpl .Values.global.postgresql.host . }}"
             - name: POSTGRES_PORT

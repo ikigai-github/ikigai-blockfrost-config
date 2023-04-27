@@ -2,7 +2,7 @@ export default {
   server: {
     listenAddress: 'localhost',
     port: 3000,
-    debug: true,
+    debug: false,
   },
   dbSync: {
     host: 'cdbsync-mainnet.mydomain.com',

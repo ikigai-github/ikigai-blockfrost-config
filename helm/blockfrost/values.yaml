@@ -2,6 +2,7 @@
 global:
   commonLabels: {}
   commonAnnotations: {}
+  cardanoNetwork: preview
   postgresql:
     host: "{{ .Release.Name }}-postgresql"
     service:
@@ -11,6 +12,7 @@ global:
       secretName: db-user-pass
       existingSecret: db-user-pass
 
+tokenRegistryUrl: https://tokens.cardano.org
 imageTag: latest
 serviceType: NodePort
 ingress:
@@ -21,8 +23,14 @@ ingress:
     secretName: ""
   annotations: {}
 config:
-  nodeAppInstance: development
+  nodeAppInstance: production
   selfManagedConfigMapName: ""
+
+# tmp volume is used when extracting state snapshots, so it might be useful to mount a large volume here
+tmpVolumeMount:
+  enabled: false
+  #storageClassName: ebs-sc
+  storageClassSize: 30Gi
 
 postgresStorageSize: 30Gi
 #postgresStorageClassName: ebs-sc
