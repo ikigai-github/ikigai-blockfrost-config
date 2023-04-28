@@ -51,14 +51,8 @@ spec:
           volumeMounts:
             - name: node-config
               mountPath: /app/config
-            - name: tmp
-              mountPath: /tmp
+
       volumes:
         - name: node-config
           configMap:
             name: {{ if not .Values.config.selfManagedConfigMapName }}bf-config{{  else }}{{ .Values.config.selfManagedConfigMapName }}{{ end }}
-        {{ if .Values.tmpVolumeMount.enabled }}
-        - name: tmp
-          persistentVolumeClaim:
-            claimName: blockfrost-tmp-data-claim
-        {{ end }}

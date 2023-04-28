@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cardano-db-sync
+  name: cardano-services
   labels:
     {{- include "blockfrost.labels" . | nindent 4 -}}
   {{- if .Values.global.commonAnnotations }}
@@ -11,15 +11,15 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: cardano-db-sync
+      app: cardano-services
   template:
     metadata:
       labels:
-        app: cardano-db-sync
+        app: cardano-services
     spec:
       containers:
         - name: cardano-node
-          image: inputoutput/cardano-node:{{ .Values.nodeImageTag }}
+          image: inputoutput/cardano-node:{{ .Values.node.imageTag }}
           ports:
             - containerPort: 3001
           workingDir: /data
@@ -33,7 +33,7 @@ spec:
               mountPath: /ipc
 
         - name: cardano-db-sync
-          image: inputoutput/cardano-db-sync:{{ .Values.dbSyncImageTag }}
+          image: inputoutput/cardano-db-sync:{{ .Values.dbSync.imageTag }}
           workingDir: /var/lib/cexplorer
           ports:
             - containerPort: 3002
@@ -45,9 +45,9 @@ spec:
             - name: POSTGRES_PORT
               value: "{{ .Values.global.postgresql.service.ports.postgresql }}"
             - name: RESTORE_RECREATE_DB
-              value: "{{ .Values.recreateDb }}"
+              value: "{{ .Values.dbSync.recreateDb }}"
             - name: RESTORE_SNAPSHOT
-              value: "{{ .Values.restoreSnapshot }}"
+              value: "{{ .Values.dbSync.restoreSnapshot }}"
           volumeMounts:
             - name: db-sync-data
               mountPath: /var/lib/cexplorer
@@ -56,27 +56,36 @@ spec:
             - name: db-credentials
               mountPath: /run/secrets
               readOnly: true
+            {{ if .Values.dbSync.volumes.tmp.enabled }}
+            - name: db-sync-tmp
+              mountPath: /tmp
+            {{ end }}
 
         - name: cardano-submit-api
-          image: inputoutput/cardano-submit-api:{{ .Values.nodeImageTag }}
+          image: inputoutput/cardano-submit-api:{{ .Values.node.imageTag }}
           ports:
             - containerPort: 8090
           env:
             - name: NETWORK
-              value: "{{ .Values.network }}"
+              value: "{{ .Values.global.cardanoNetwork }}"
           volumeMounts:
             - name: node-ipc
-              mountPath: /ipc
+              mountPath: /node-ipc
 
       volumes:
         - name: node-ipc
           emptyDir: {}
         - name: node-db
           persistentVolumeClaim:
-            claimName: cardano-node-db-claim
+            claimName: cardano-node-data-claim
         - name: db-sync-data
           persistentVolumeClaim:
             claimName: db-sync-data-claim
         - name: db-credentials
           secret:
             secretName: {{ .Values.global.postgresql.auth.secretName }}
+        {{ if .Values.dbSync.volumes.tmp.enabled }}
+        - name: db-sync-tmp
+          persistentVolumeClaim:
+            claimName: db-sync-tmp-claim
+        {{ end }}

@@ -1,0 +1,24 @@
+global:
+  commonLabels: {}
+  commonAnnotations: {}
+  cardanoNetwork: preview
+
+dbSync:
+  restoreSnapshot: ""
+  recreateDb: "N"
+  imageTag: 13.1.0.2
+  volumes:
+    data:
+      #storageClassName:
+      storageSize: 30
+    tmp:
+      enabled: false
+      #storageClassName:
+      storageSize: 30
+
+node:
+  imageTag: 1.35.5
+  volumes:
+    data:
+      #storageClass:
+      storageSize: 10
