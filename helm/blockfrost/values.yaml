@@ -12,6 +12,7 @@ global:
       secretName: db-user-pass
       existingSecret: db-user-pass
 
+# blockfrost service vars
 tokenRegistryUrl: https://tokens.cardano.org
 imageTag: latest
 serviceType: NodePort
@@ -25,16 +26,10 @@ ingress:
 config:
   nodeAppInstance: production
   selfManagedConfigMapName: ""
-
-# tmp volume is used when extracting state snapshots, so it might be useful to mount a large volume here
-tmpVolumeMount:
-  enabled: false
-  #storageClassName: ebs-sc
-  storageClassSize: 30Gi
-
 postgresStorageSize: 30Gi
 #postgresStorageClassName: ebs-sc
 
+# postgres helm chart vars
 postgresql:
   deploy: true
   auth:
@@ -47,3 +42,24 @@ postgresql:
   primary:
     persistence:
       existingClaim: postgres-data-claim
+
+# cardano services helm chart vars
+cardano-services:
+  dbSync:
+    restoreSnapshot: ""
+    recreateDb: "N"
+    imageTag: 13.1.0.2
+    volumes:
+      data:
+        #storageClassName:
+        storageSize: 30Gi
+      tmp:
+        enabled: false
+        #storageClassName:
+        storageSize: 30Gi
+  node:
+    imageTag: 1.35.5
+    volumes:
+      data:
+        #storageClassName:
+        storageSize: 10Gi

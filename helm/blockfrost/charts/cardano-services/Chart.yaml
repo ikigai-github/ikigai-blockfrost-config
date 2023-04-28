@@ -1,3 +1,3 @@
 apiVersion: v2
-name: cardano_db_sync
+name: cardano-services
 version: 1.0.0

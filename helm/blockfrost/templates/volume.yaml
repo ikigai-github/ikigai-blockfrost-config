@@ -20,26 +20,3 @@ spec:
     requests:
       storage: "{{ .Values.postgresStorageSize }}"
 {{ end }}
-
-{{ if .Values.tmpVolumeMount.enabled }}
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: blockfrost-tmp-data-claim
-  labels:
-    {{- include "blockfrost.labels" . | nindent 4 -}}
-  {{- if .Values.global.commonAnnotations }}
-  annotations:
-    {{- include "blockfrost.annotations" . | nindent 4 -}}
-  {{- end }}
-spec:
-  accessModes:
-    - ReadWriteOnce
-  {{- if .Values.tmpVolumeMount.storageClassName }}
-  storageClassName: "{{ .Values.tmpVolumeMount.storageClassName }}"
-  {{- end }}
-  resources:
-    requests:
-      storage: "{{ .Values.tmpVolumeMount.storageSize }}"
-{{ end }}

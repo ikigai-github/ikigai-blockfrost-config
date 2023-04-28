@@ -1,142 +1,149 @@
 # Parameter Inputs
 
-<table>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
+```yaml
+---
+global:
+  commonLabels:
+    desc: Any labels you want to add to all created resources
+    type: map
+  commonAnnotations:
+    desc: Any annotations you want to add to all created resources
+    type: map
+  cardanoNetwork:
+    desc: The name of cardano network to connect to. preview, preprod, mainnet etc
+    type: str
+  postgresql:
+    host:
+      desc: The hostname of the postgres instance db-sync should connect to
+      type: str
+    service:
+      ports:
+        postgresql:
+          desc: The port of the postgres instance db sync should connect to
+          type: str
+    auth:
+      secretName:
+        desc: The name of the kubernetes secret containing (or to be created with) postgres creds for db sync
+        type: str
+      existingSecret:
+        desc: If a secret with postgres credentials already exists, enter the name here. Should match 'secretName' above
+        type: str
 
-<tr>
-<td>serviceType</td>
-<td>The blockfrost service type</td>
-<td>NodePort</td>
-</tr>
+# blockfrost service vars
+tokenRegistryUrl:
+  desc: The token registry url blockfrost should use
+  type: str
 
-<tr>
-<td>ingress.enabled</td>
-<td>If true, an ingress resource will be created for the blockfrost service</td>
-<td>false</td>
-</tr>
+imageTag:
+  desc: The docker image tag to use for blockfrost-ryo
+  type: str
 
-<tr>
-<td>ingress.host</td>
-<td>The hostname the blockfrost ingress should listen on</td>
-<td>""</td>
-</tr>
+serviceType:
+  desc: The type of service to create for the blockfrost api
+  type: str
 
-<tr>
-<td>ingress.tls.enabled</td>
-<td>If true, the ingress created for blockfrost will attempt to use TLS</td>
-<td>false</td>
-</tr>
+ingress:
+  enabled:
+    desc: If true, an ingress will be created for the blockfrost api
+    type: bool
+  host:
+    desc: The hostname the blockfrost ingress should listen on
+    type: str
+  tls:
+    enabled:
+      desc: If true, the blockfrost ingress will use TLS
+      type: bool
+    secretName:
+      desc: The name of the secret containing the TLS certificate to use
+      type: str
+  annotations:
+    desc: Additional annotations to add to the custom ingress
+    type: map
 
-<tr>
-<td>ingress.tls.secretName</td>
-<td>The name of the TLS secret that either eixists or should be created, if the blockfrost ingress and TLS are enabled</td>
-<td>""</td>
-</tr>
+config:
+  nodeAppInstance:
+    desc: The name of the config blockfrost should use. Config options should generally set via env vars
+    type: str
+  selfManagedConfigMapName:
+    desc: The name of a config map with the custom configs blockfrost should mount and use
+    type: str
 
-<tr>
-<td>ingress.annotations</td>
-<td>A dictionary of annotations to apply to the ingress created for blockfrost</td>
-<td>{}</td>
-</tr>
+postgresStorageSize:
+  desc: The size of the storage postgres should use for a volume, if postgres is being deployed
+  type: str
 
-<tr>
-<td>config.nodeAppInstance</td>
-<td>The NODE_ENV/NODE_APP_INSTANCE value for the blockfrost service. This value must correspond to a filename in the blockfrost config map</td>
-<td>development</td>
-</tr>
+postgresStorageClassName:
+  desc: The name of the storage class postgres should use for a volume, if postgres is being deployed
+  type: str
 
-<tr>
-<td>config.selfManagedConfigMapName</td>
-<td>Set this to the name of pre-existing config map with blockfrost config files. If this is unset, suggested configs from the blockfrost team will be deployed</td>
-<td>development</td>
-</tr>
+# postgres helm chart vars
+postgresql:
+  deploy:
+    desc: If true, a postgres instance will be deployed to the cluster
+    type: bool
+  auth:
+    deploySecret:
+      desc: If true, postgres will generate and deploy its own secret for SA auth. This is dangerous, since its ephemeral
+      type: str
+    database:
+      desc: The name of a database to create in addition to postgres
+      type: str
+    username:
+      desc: The name of a user to create in addition to postgres
+      type: str
+    secretKeys:
+      adminPasswordKey:
+        desc: The key the admin password should be stored under, if deploying the auth secret
+        type: str
+      userPasswordKey:
+        desc: The key the user password should be stored under, if deploying the auth secret
+        type: str
+  primary:
+    persistence:
+      existingClaim:
+        desc: This is not meant to be changed by the end user
+        type: str
 
-<tr>
-<td>cardano_db_sync.nodeStorageClassName</td>
-<td>The name of the storage class that should satisfy the cardano node persistent storage claim. Default is cluster default</td>
-<td></td>
-</tr>
-
-<tr>
-<td>cardano_db_sync.nodeStorageSize</td>
-<td>The size of the cardano node persistent storage claim</td>
-<td>1Gi</td>
-</tr>
-
-<tr>
-<td>cardano_db_sync.syncStorageClassName</td>
-<td>The name of the storage class that should satisfy the cardano db-sync persistent storage claim. Default is cluster default</td>
-<td></td>
-</tr>
-
-<tr>
-<td>cardano_db_sync.syncStorageSize</td>
-<td>The size of the cardano node persistent storage claim</td>
-<td>3Gi</td>
-</tr>
-
-<tr>
-<td>postgresql.postgresStorageClassName</td>
-<td>The name of the storage class that should satisfy the postgres persistent storage claim, if postgres is being deployed. Default is cluster default</td>
-<td></td>
-</tr>
-
-<tr>
-<td>postgresql.postgresStorageSize</td>
-<td>The size of the postgres persistent storage claim, if postgres is being deployed</td>
-<td>8Gi</td>
-</tr>
-
-<tr>
-<td>cardano_db_sync.network</td>
-<td>The name of the blockfrost network to follow. Options come from the blockfrost documentation</td>
-<td>preview</td>
-</tr>
-
-<tr>
-<td>postgresql.deploy</td>
-<td>If true, postgres will be deployed by a helm subhcart and managed by this stack</td>
-<td>true</td>
-</tr>
-
-<tr>
-<td>global.postgresql.host</td>
-<td>The hostname for the postgresql instance</td>
-<td>"{{ .Release.Name }}-postgresql"</td>
-</tr>
-
-<tr>
-<td>cardano_db_sync.recreateDb</td>
-<td>If 'Y', will cause the db-sync database to be dropped and recreated</td>
-<td>'N'</td>
-</tr>
-
-<tr>
-<td>postgresql.auth.deploySecret</td>
-<td>If true, a secret will be created with pgsql connection details. The alternative is using a secret that is created outside of this helm chart.</td>
-<td>true</td>
-</tr>
-
-<tr>
-<td>postgresql.auth.database</td>
-<td>The name of the database db-sync should connect to in pgsql. If using a deployed pg instance, this database will be created</td>
-<td>"cexplorer"</td>
-</tr>
-
-<tr>
-<td>postgresql.auth.username</td>
-<td>The username the db-sync instance should use to connect to pgsql. If using a deployed pg instance, this user will be created with db owner</td>
-<td>"cexplorer"</td>
-</tr>
-
-<tr>
-<td>global.postgresql.auth.secretName</td>
-<td>The name of the auth secret, either pre-existing or to be created</td>
-<td>"db-user-pass"</td>
-</tr>
-
-</table>
+# cardano_services helm chart vars
+cardano_services:
+  dbSync:
+    restoreSnapshot:
+      desc: The local file or url to a state snapshot that db sync should restore from
+      type: str
+    recreateDb:
+      desc: Y or N, if Y the DB will be dropped and recreated
+      type: str
+    imageTag:
+      desc: The tag of the db sync image to use
+      type: str
+    volumes:
+      data:
+        storageClassName:
+          desc: The name of the storage class to use for the data volume. Defaults to cluster default
+          type: str
+        storageSize:
+          desc: The size of the storage to use for the data volume
+          type: str
+      tmp:
+        enabled: false
+          desc: If true, a volume will be mounted over /tmp. Useful when restoring from snapshots
+          type: bool
+        storageClassName:
+          desc: The name of the storage class to use for the tmp volume. Defaults to cluster default
+          type: str
+        storageSize:
+          desc: The size of the storage to use for the tmp volume
+          type: str
+  node:
+    imageTag:
+      desc: The tag of the node and submit api image to use
+      type: str
+    volumes:
+      data:
+        storageClassName:
+          desc: The name of the storage class to use for the data volume. Defaults to cluster default
+          type: str
+        storageSize:
+          desc: The size of the storage to use for the data volume
+          type: str
+```
