@@ -13,6 +13,7 @@ global:
       existingSecret: db-user-pass
 
 # blockfrost service vars
+numReplicas: 1
 tokenRegistryUrl: https://tokens.cardano.org
 imageTag: latest
 serviceType: NodePort
