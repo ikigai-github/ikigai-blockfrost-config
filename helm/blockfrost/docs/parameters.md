@@ -30,6 +30,10 @@ global:
         type: str
 
 # blockfrost service vars
+numReplicas:
+  desc: The number of replicas for the blockfrost backend deployment
+  type: int
+
 tokenRegistryUrl:
   desc: The token registry url blockfrost should use
   type: str

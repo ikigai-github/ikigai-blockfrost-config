@@ -9,6 +9,7 @@ metadata:
     {{- include "blockfrost.annotations" . | nindent 4 -}}
   {{- end }}
 spec:
+  replicas: {{ .Values.numReplicas }}
   selector:
     matchLabels:
       app: blockfrost
