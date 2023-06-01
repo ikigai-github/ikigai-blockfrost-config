@@ -38,6 +38,9 @@ tokenRegistryUrl:
   desc: The token registry url blockfrost should use
   type: str
 
+dbSecretName:
+  desc: Optional, The name of a secret with PGSQL credentials for blockfrost. Default is to use the global var postgres.auth
+  type: str
 imageTag:
   desc: The docker image tag to use for blockfrost-ryo
   type: str
