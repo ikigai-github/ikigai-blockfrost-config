@@ -15,6 +15,7 @@ global:
 # blockfrost service vars
 numReplicas: 1
 tokenRegistryUrl: https://tokens.cardano.org
+postgresqlHostname: ""
 dbSecretName: ""
 imageTag: latest
 serviceType: NodePort

@@ -41,6 +41,11 @@ tokenRegistryUrl:
 dbSecretName:
   desc: Optional, The name of a secret with PGSQL credentials for blockfrost. Default is to use the global var postgres.auth
   type: str
+
+postgresqlHostname:
+  desc: Optional, The name of the remote PGSQL server for blockfrost. Default is to use the global var postgres.hostname
+  type: str
+
 imageTag:
   desc: The docker image tag to use for blockfrost-ryo
   type: str
