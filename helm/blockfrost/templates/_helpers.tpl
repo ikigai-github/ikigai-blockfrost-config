@@ -11,7 +11,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 
 {{- define "blockfrost.annotations" -}}
 {{- range $k, $v := .Values.global.commonAnnotations -}}
-{{ $k }}: "{{ $v }}"
+{{ $k }}: {{ $v | toJson }}
 {{ end }}
 {{- end }}
 
