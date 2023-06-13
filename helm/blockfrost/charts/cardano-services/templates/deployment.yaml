@@ -16,6 +16,11 @@ spec:
     metadata:
       labels:
         app: cardano-services
+        {{- include "blockfrost.labels" . | nindent 8 -}}
+      {{- if .Values.global.commonAnnotations }}
+      annotations:
+        {{- include "blockfrost.annotations" . | nindent 8 -}}
+      {{- end }}
     spec:
       containers:
         - name: cardano-node
