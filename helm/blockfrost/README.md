@@ -4,11 +4,11 @@ Helm offers a convinient and customizable way to deploy blockfrost in your kuber
 
 The cardano db-sync service is included in this deployment as a subchart. Postgresql is optionally included as a subchart as well
 
-## Postgresl and Cardano db-sync
+## Postgrest and Cardano Services 
 
 More documentation regarding these services can be found at: <br>
 [deployment examples](./docs/examples) <br>
-[cardano_db_sync subchart](./charts/cardano_db_sync/README.md) <br>
+[supported deployments](../../README.md)
 
 ## Usage
 
