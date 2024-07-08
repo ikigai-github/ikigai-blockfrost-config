@@ -1,8 +1,0 @@
-apiVersion: v2
-name: blockfrost
-version: 2.5.0
-dependencies:
-  - name: postgresql
-    version: "15.5.14"
-    repository: oci://registry-1.docker.io/bitnamicharts
-    condition: postgresql.deploy
