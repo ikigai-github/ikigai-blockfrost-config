@@ -1,9 +1,8 @@
 name: "Publish Helm Chart"
 on:
-  workflow_dispatch:
   push:
-    tags:
-      - v*
+    branches:
+      - main
 
 jobs:
   release:
@@ -24,6 +23,6 @@ jobs:
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.6.0
         with:
-          charts_dir: helm/blockfrost
+          charts_dir: helm
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
