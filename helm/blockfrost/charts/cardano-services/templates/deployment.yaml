@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: cardano-node
-          image: inputoutput/cardano-node:{{ .Values.node.imageTag }}
+          image: ghcr.io/intersectmbo/cardano-node:{{ .Values.node.imageTag }}
           ports:
             - containerPort: 3001
           workingDir: /data
@@ -38,7 +38,7 @@ spec:
               mountPath: /ipc
 
         - name: cardano-db-sync
-          image: inputoutput/cardano-db-sync:{{ .Values.dbSync.imageTag }}
+          image: ghcr.io/intersectmbo/cardano-db-sync:{{ .Values.dbSync.imageTag }}
           workingDir: /var/lib/cexplorer
           ports:
             - containerPort: 3002
@@ -67,7 +67,7 @@ spec:
             {{ end }}
 
         - name: cardano-submit-api
-          image: inputoutput/cardano-submit-api:{{ .Values.node.imageTag }}
+          image: ghcr.io/intersectmbo/cardano-submit-api:{{ .Values.node.imageTag }}
           ports:
             - containerPort: 8090
           env:

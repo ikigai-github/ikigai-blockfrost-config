@@ -51,7 +51,7 @@ cardano-services:
   dbSync:
     restoreSnapshot: ""
     recreateDb: "N"
-    imageTag: 13.1.0.2
+    imageTag: 13.2.0.2
     volumes:
       data:
         #storageClassName:
@@ -61,7 +61,7 @@ cardano-services:
         #storageClassName:
         storageSize: 30Gi
   node:
-    imageTag: 1.35.5
+    imageTag: 8.9.1
     volumes:
       data:
         #storageClassName:
