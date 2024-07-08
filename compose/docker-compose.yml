@@ -1,8 +1,6 @@
-version: "3.9"
-
 services:
   postgres:
-    image: postgres:11.18-alpine
+    image: postgres:16.3-alpine
     environment:
       - POSTGRES_LOGGING=true
       - PGDATA=/var/lib/postgresql/data/pgdata
@@ -13,7 +11,7 @@ services:
       - 5432:5432
     volumes:
       - postgres:/var/lib/postgresql/data
-    restart: on-failure
+    restart: always
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -28,7 +26,7 @@ services:
       - blockfrost
 
   cardano-node:
-    image: inputoutput/cardano-node:1.35.5
+    image: ghcr.io/intersectmbo/cardano-node:8.9.1
     environment:
       - NETWORK=${NETWORK:-preview}
     ports:
@@ -51,7 +49,7 @@ services:
       - blockfrost
 
   cardano-db-sync:
-    image: inputoutput/cardano-db-sync:13.1.0.2
+    image: ghcr.io/intersectmbo/cardano-db-sync:13.2.0.2
     environment:
       - NETWORK=${NETWORK:-preview}
       - POSTGRES_HOST=postgres
@@ -81,16 +79,23 @@ services:
     networks:
       - blockfrost
 
-  cardano-submit-api:
-    image: inputoutput/cardano-submit-api:1.35.5
+  blockfrost:
+    image: blockfrost/backend-ryo:latest
     environment:
-      - NETWORK=${NETWORK:-preview}
-    depends_on:
-      - cardano-node
-    volumes:
-      - node-ipc:/node-ipc
+      - BLOCKFROST_CONFIG_DBSYNC_HOST=postgres
+      - BLOCKFROST_CONFIG_SERVER_LISTEN_ADDRESS=0.0.0.0
+      - NODE_APP_INSTANCE=development
+      - BLOCKFROST_CONFIG_DBSYNC_USER=${DB_USER}
+      - BLOCKFROST_CONFIG_DBSYNC_DATABASE=${DB_NAME}
+      - BLOCKFROST_CONFIG_DBSYNC_PORT=5432
+      - PGPASSWORD=${DB_PASSWORD}
     ports:
-      - 8090:8090
+      - 3000:3000
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./config:/app/config
     restart: on-failure
     logging:
       driver: "json-file"
@@ -100,22 +105,16 @@ services:
     networks:
       - blockfrost
 
-  blockfrost:
-    image: blockfrost/backend-ryo:latest
+  cardano-submit-api:
+    image: ghcr.io/intersectmbo/cardano-submit-api:8.9.1
     environment:
-      - BLOCKFROST_CONFIG_DBSYNC_HOST=postgres
-      - BLOCKFROST_CONFIG_SERVER_LISTEN_ADDRESS=0.0.0.0
-      - NODE_APP_INSTANCE=development
-      - BLOCKFROST_CONFIG_DBSYNC_USER=${DB_USER}
-      - BLOCKFROST_CONFIG_DBSYNC_DATABASE=${DB_NAME}
-      - PGPASSWORD=${DB_PASSWORD}
-    ports:
-      - 3000:3000
+      - NETWORK=${NETWORK:-preview}
     depends_on:
-      postgres:
-        condition: service_healthy
+      - cardano-node
     volumes:
-      - ./config:/app/config
+      - node-ipc:/node-ipc
+    ports:
+      - 8090:8090
     restart: on-failure
     logging:
       driver: "json-file"
