@@ -13,6 +13,7 @@ out of the box, but also provides options to easily configure and control the de
 - [helm](./helm/blockfrost/README.md)
 
 ## Installing The Pre-Built Helm Chart
+blockfrost-postgresql:5432:cexplorer:cexplorer:1z7CAJ0ARrcvvWlIvLRx
 
 You can install our helm chart by following these commands:
 

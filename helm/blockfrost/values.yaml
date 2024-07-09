@@ -43,6 +43,18 @@ postgresql:
       adminPasswordKey: postgres_admin_password
       userPasswordKey: postgres_password
   primary:
+    extendedConfiguration: |-
+      maintenance_work_mem = 1GB
+      max_parallel_maintenance_workers = 4
+    resources:
+      limits:
+        cpu: 3.0
+        memory: 6144Mi
+        ephemeral-storage: 1024Mi
+      requests:
+        cpu: 1.0
+        memory: 3072Mi
+        ephemeral-storage: 50Mi
     persistence:
       existingClaim: postgres-data-claim
 
