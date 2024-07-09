@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blockfrost-indexes
+data:
+  blockfrost-indexes.sql: |-
+    CREATE INDEX IF NOT EXISTS bf_idx_block_hash_encoded ON block USING HASH (encode(hash, 'hex'));
+    CREATE INDEX IF NOT EXISTS bf_idx_datum_hash ON datum USING HASH (encode(hash, 'hex'));
+    CREATE INDEX IF NOT EXISTS bf_idx_multi_asset_policy ON multi_asset USING HASH (encode(policy, 'hex'));
+    CREATE INDEX IF NOT EXISTS bf_idx_multi_asset_policy_name ON multi_asset USING HASH ((encode(policy, 'hex') || encode(name, 'hex')));
+    CREATE INDEX IF NOT EXISTS bf_idx_pool_hash_view ON pool_hash USING HASH (view);
+    CREATE INDEX IF NOT EXISTS bf_idx_redeemer_data_hash ON redeemer_data USING HASH (encode(hash, 'hex'));
+    CREATE INDEX IF NOT EXISTS bf_idx_scripts_hash ON script USING HASH (encode(hash, 'hex'));
+    CREATE INDEX IF NOT EXISTS bf_idx_tx_hash ON tx USING HASH (encode(hash, 'hex'));
+    CREATE UNIQUE INDEX IF NOT EXISTS bf_u_idx_epoch_stake_epoch_and_id ON epoch_stake (epoch_no, id);
+    CREATE INDEX IF NOT EXISTS bf_idx_reference_tx_in_tx_in_id ON reference_tx_in (tx_in_id);
+    CREATE INDEX IF NOT EXISTS bf_idx_collateral_tx_in_tx_in_id ON collateral_tx_in (tx_in_id);
+    CREATE INDEX IF NOT EXISTS bf_idx_redeemer_script_hash ON redeemer USING HASH (encode(script_hash, 'hex'));
+    CREATE INDEX IF NOT EXISTS bf_idx_redeemer_tx_id ON redeemer USING btree (tx_id);
+    CREATE INDEX IF NOT EXISTS bf_idx_col_tx_out ON collateral_tx_out USING btree (tx_id);
+    CREATE INDEX IF NOT EXISTS bf_idx_ma_tx_mint_ident ON ma_tx_mint USING btree (ident);
+    CREATE INDEX IF NOT EXISTS bf_idx_ma_tx_out_ident ON ma_tx_out USING btree (ident);
+    CREATE INDEX IF NOT EXISTS bf_idx_instant_reward_addr_id ON instant_reward USING btree (addr_id);
+    CREATE INDEX IF NOT EXISTS bf_idx_instant_reward_spendable_epoch ON instant_reward USING btree (spendable_epoch);
+  wait-for-migrations.sh: |-
+    #!/bin/bash
+
+    check_table_exists() {
+      psql -h "$PGHOST" -U "$PGUSER" -d "$PGDATABASE" -c "\dt schema_version" | grep -q "schema_version"
+    }
+
+    check_migration() {
+      psql -h "$PGHOST" -U "$PGUSER" -d "$PGDATABASE" -c "SELECT 1 FROM schema_version WHERE stage_three > 0" | grep -q 1
+    }
+
+    until check_table_exists; do
+      echo "Waiting for schema_version table to be created..."
+      sleep 10
+    done
+
+    until check_migration; do
+      echo "Waiting for stage 3 of cardano-db-sync migration..."
+      sleep 600
+    done
+
+    echo "Stage 3 migration complete. Running blockfrost index creation script."
+    psql -h "$PGHOST" -U "$PGUSER" -d "$PGDATABASE" -f /scripts/blockfrost-indexes.sql

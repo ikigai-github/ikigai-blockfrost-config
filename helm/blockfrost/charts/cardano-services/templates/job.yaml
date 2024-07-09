@@ -1,0 +1,52 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-blockfrost-indexes
+spec:
+  activeDeadlineSeconds: 172800  # 2 days
+  backoffLimit: 6  # Allow for some retries in case of failure
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: blockfrost-indexes
+          image: postgres:16.3-alpine
+          env:
+            - name: PGHOST
+              value: "{{ tpl .Values.global.postgresql.host . }}"
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ if .Values.dbSecretName }}{{ .Values.dbSecretName }}{{ else }}{{ .Values.global.postgresql.auth.secretName }}{{ end }}
+                  key: postgres_password
+            - name: PGDATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ if .Values.dbSecretName }}{{ .Values.dbSecretName }}{{ else }}{{ .Values.global.postgresql.auth.secretName }}{{ end }}
+                  key: postgres_db
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ if .Values.dbSecretName }}{{ .Values.dbSecretName }}{{ else }}{{ .Values.global.postgresql.auth.secretName }}{{ end }}
+                  key: postgres_user
+          command: ["sh", "/scripts/wait-for-migrations.sh"]
+          volumeMounts:
+            - name: script
+              mountPath: /scripts
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+
+      volumes:
+        - name: script
+          configMap:
+            name: blockfrost-indexes
+            items:
+              - key: blockfrost-indexes.sql
+                path: blockfrost-indexes.sql
+              - key: wait-for-migrations.sh
+                path: wait-for-migrations.sh
