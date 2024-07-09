@@ -2,6 +2,18 @@ apiVersion: v1
 entries:
   blockfrost:
   - apiVersion: v2
+    created: "2024-07-09T23:17:16.619281519Z"
+    dependencies:
+    - condition: postgresql.deploy
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 15.5.14
+    digest: efdd5ffc27072d6f5ea2bbf93ed2369ba1ccf6a8047ed90d9fbe7442922a0fb4
+    name: blockfrost
+    urls:
+    - https://github.com/ikigai-github/ikigai-blockfrost-config/releases/download/blockfrost-2.6.0/blockfrost-2.6.0.tgz
+    version: 2.6.0
+  - apiVersion: v2
     created: "2024-07-08T19:00:53.495628594Z"
     dependencies:
     - condition: postgresql.deploy
@@ -13,4 +25,4 @@ entries:
     urls:
     - https://github.com/ikigai-github/ikigai-blockfrost-config/releases/download/blockfrost-2.5.0/blockfrost-2.5.0.tgz
     version: 2.5.0
-generated: "2024-07-08T19:00:53.495637491Z"
+generated: "2024-07-09T23:17:16.619294594Z"
